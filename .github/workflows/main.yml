@@ -3,19 +3,19 @@ name: Auto Format Code
 on:
   push:
     branches:
-      - main  # Run the workflow when code is pushed to 'main'
+      - main  
 
 jobs:
   format-code:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # ✅ This allows pushing changes
+      contents: write  
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # ✅ Use GitHub's token for authentication
+          token: ${{ secrets.GITHUB_TOKEN }}  
 
       - name: Set up Python
         uses: actions/setup-python@v4
