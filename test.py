@@ -1,2 +1,4 @@
-def test(): print("hello" ) 
-print( "world")
+def test(): print("hello")
+
+
+print("world")
