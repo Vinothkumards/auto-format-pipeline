@@ -1,36 +1,30 @@
-name: Auto Format Code
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-
 jobs:
-  format:
+  format-code:
     runs-on: ubuntu-latest
-
+    permissions: write-all  # ✅ Give write access to push changes
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: '3.x'
 
-      - name: Install Black (Python Formatter)
-        run: pip install black
+      - name: Install Black (or autopep8)
+        run: pip install black  # Or use 'pip install autopep8'
 
-      - name: Format Code
-        run: black .
+      - name: Format Python code
+        run: black .  # Use 'autopep8 --in-place --recursive .' if using autopep8
 
-      - name: Commit Changes
+      - name: Commit formatted code
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git diff --cached --quiet || git commit -m "Auto-format code using Black"
-          git push
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -am "Auto-format code using Black" || echo "No changes to commit"
+
+      - name: Push changes
+        run: |
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
